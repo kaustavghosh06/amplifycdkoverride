@@ -1,0 +1,28 @@
+{
+    "Resources": {
+        "S3Bucket": {
+            "Type": "AWS::S3::Bucket",
+            "Properties": {
+                "BucketName": "nikhilsbucket",
+                "ObjectLockEnabled": true
+            }
+        },
+        "S3AuthPublicPolicy": {
+            "Type": "AWS::IAM::Policy",
+            "Properties": {
+                "PolicyDocument": {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Sid": "1234567890",
+                            "Effect": "Allow",
+                            "Action": "*",
+                            "Resource": "*"
+                        }
+                    ]
+                },
+                "PolicyName": "my_custom_name2"
+            }
+        }
+    }
+}
