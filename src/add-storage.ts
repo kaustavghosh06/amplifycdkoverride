@@ -8,6 +8,7 @@ const resourceDir = path.join(process.cwd(), `amplify/storage/s3resource`);
 
 const cliInputs = addStorage();
 compileStorage(cliInputs);
+compileCustomResources();
 
 export function addStorage() {
   // Create amplify directory
@@ -18,7 +19,7 @@ export function addStorage() {
   const bucketName = process.argv[2] || "myawesomebucket";
 
   const inputs = { bucketName };
-
+ 
   fs.writeFileSync(path.join(resourceDir, 'cli-inputs.json'), JSON.stringify(inputs, null, 4));
 
   return inputs;
@@ -84,5 +85,38 @@ export function compileStorage(cliInputs: any) {
 
   fs.writeFileSync(path.join(resourceDir, 'build/cloudformation.json'), JSON.stringify(resourceStack.cfnstring, null, 4));
 
+}
+
+export function compileCustomResources() {
+
+
+
+  // Pass object to overrides which modifies AmplifyStorageResource
+
+  const resourceDir = path.join(process.cwd(), `amplify/custom-category/custom-resource`);
+
+  const customStackPath = path.join('/Users/kaustavg/tssample/dist/amplify/custom-category/custom-resource/custom-stack.js');
+  const {CustomStack} = require(customStackPath);
+  
+
+  fs.ensureDirSync(path.join(resourceDir, 'build'));
+
+  
+  // generate parameters.json from AmplifyStorageResource object
+
+  fs.writeFileSync(path.join(resourceDir, 'build/parameters.json'), JSON.stringify({}, null, 4));
+
+
+  // generate cloudformaion-template.json &  from AmplifyStorageResource object
+  const app = new cdk.App();
+  const resourceStack = new CustomStack(app, "CustomResource");
+
+  console.log(resourceStack._toCloudFormation());
+
+  //console.log(JSON.stringify(resourceStack.cfnstring));
+  //console.log(JSON.stringify(overriddenResourceStack.cfnstring));
+
+
+  fs.writeFileSync(path.join(resourceDir, 'build/cloudformation.json'), JSON.stringify(resourceStack._toCloudFormation(), null, 4));
 
 }
