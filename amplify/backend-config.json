@@ -1,0 +1,26 @@
+{
+    "function": {
+      "S3Trigger09ccb9e1": {
+        "service": "Lambda",
+        "providerPlugin": "awscloudformation",
+        "build": true
+      }
+    },
+    "storage": {
+      "s300346c52": {
+        "service": "S3",
+        "providerPlugin": "awscloudformation",
+        "dependsOn": [
+          {
+            "category": "function",
+            "resourceName": "S3Trigger09ccb9e1",
+            "attributes": [
+              "Name",
+              "Arn",
+              "LambdaExecutionRole"
+            ]
+          }
+        ]
+      }
+    }
+  }
